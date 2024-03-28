@@ -1,0 +1,9 @@
+This is how to build EgrillMadness in a macOS Terminal window, assuming
+you've already installed XQuartz.
+
+1. Download the Mac command line skeleton for EgrillMadness and unzip it.
+2. To build the program, change into the EgrillMadness directory and type
+		make
+3. To run the program, type
+		./EgrillMadness
+
