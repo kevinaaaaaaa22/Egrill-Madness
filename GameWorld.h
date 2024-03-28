@@ -14,7 +14,7 @@ public:
 
 	GameWorld(std::string assetPath)
 	 : m_lives(START_PLAYER_LIVES), m_score(0), m_level(0),
-	   m_controller(nullptr), m_assetPath(assetPath)
+	   m_controller(nullptr), m_assetPath(assetPath), m_regularEgrills(0), m_pokylanes(0)
 	{
 	}
 
@@ -98,12 +98,27 @@ public:
 		return m_assetPath;
 	}
 
+	void incEgrills(int type) {
+		if (type == REGULAR_EGRILL) m_regularEgrills++;
+		else if (type == POKYLANE) m_pokylanes++;
+	}
+
+	int getEgrillsCount(int type) {
+		if (type == REGULAR_EGRILL) return m_regularEgrills;
+		else if (type == POKYLANE) return m_pokylanes;
+		return 0;
+	}
+
 private:
 	int				m_lives;
 	int				m_score;
 	int				m_level;
 	GameController* m_controller;
 	std::string		m_assetPath;
+
+	// Record number of egrills collected
+	int				m_regularEgrills;
+	int				m_pokylanes;
 };
 
 #endif // GAMEWORLD_H_

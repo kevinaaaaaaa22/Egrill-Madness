@@ -13,8 +13,9 @@ public:
 
 	enum MazeEntry {
 		empty, exit, player, horiz_ragebot, vert_ragebot,
-		thiefbot_factory, mean_thiefbot_factory, wall, marble, pit,
-		crystal, restore_health, extra_life, ammo
+		thiefbot_factory, mean_thiefbot_factory, wall, marble, pit, 
+		restore_health, extra_life, ammo, thiefbot, mean_thiefbot, pea,
+		regular_egrill, pokylane 
 	};
 	enum LoadResult {
 		load_success, load_fail_file_not_found, load_fail_bad_format};
@@ -73,10 +74,14 @@ public:
 					case '#':  me = wall; break;
 					case 'b':  me = marble; break;
 					case 'o':  me = pit; break;
-					case '*':  me = crystal; break;
 					case 'r':  me = restore_health; break;
 					case 'e':  me = extra_life; break;
 					case 'a':  me = ammo; break;
+					case 't':  me = thiefbot; break;
+					case 'm':  me = mean_thiefbot; break;
+					case 'p':  me = pea; break;
+					case '*':  me = regular_egrill; break;
+					case 'i':  me = pokylane; break;
 				}
 				m_maze[y][x] = me;
 			}

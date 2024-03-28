@@ -227,7 +227,10 @@ Marble::Marble(double startX, double startY, StudentWorld* world) : Actor(IID_MA
 
 Pit::Pit(double startX, double startY, StudentWorld* world) : Actor(IID_PIT, startX, startY, none, world) {Actor::GraphObject::setVisible(true);}
 
-Crystal::Crystal(double startX, double startY, StudentWorld* world) : Actor(IID_CRYSTAL, startX, startY, none, world) {Actor::GraphObject::setVisible(true);}
+Egrill::Egrill(double startX, double startY, StudentWorld* world, int type, int IID) : Actor(IID, startX, startY, none, world) {
+    Actor::GraphObject::setVisible(true);
+    m_type = type;
+}
 
 Exit::Exit(double startX, double startY, StudentWorld* world) : Actor(IID_EXIT, startX, startY, none, world) {Actor::GraphObject::setVisible(false);}
 
@@ -386,18 +389,22 @@ void Pit::doSomething() {
     }
 }
 
-void Crystal::doSomething() {
-    if (!Actor::getState()) return; // If crystal is dead
+void Egrill::doSomething() {
+    if (!Actor::getState()) return; // If egrill is not active
     if (Actor::onPlayer()) { // If at same location as player
-        Actor::getWorld()->GameWorld::increaseScore(50);
         Actor::setState(false);
         Actor::getWorld()->GameWorld::playSound(SOUND_GOT_GOODIE);
-        Actor::getWorld()->removeCrystal();
+        Actor::getWorld()->removeEgrill();
+        Actor::getWorld()->GameWorld::incEgrills(m_type);
+        int scoreBonus = 0;
+        if (m_type == REGULAR_EGRILL) scoreBonus = 50;
+        else if (m_type == POKYLANE) scoreBonus = 200;
+        Actor::getWorld()->GameWorld::increaseScore(scoreBonus);
     }
 }
 
 void Exit::doSomething() {
-    if (Actor::getWorld()->crystalCount() <= 0) { // If no more crystals
+    if (Actor::getWorld()->egrillCount() <= 0) { // If no more crystals
         if (!Actor::GraphObject::isVisible()) { // If not visible yet
             Actor::GraphObject::setVisible(true); // Make visible
             Actor::getWorld()->GameWorld::playSound(SOUND_REVEAL_EXIT);
@@ -482,7 +489,7 @@ void ThiefBot::doSomething() {
                     Actor::move();
                     int newX = Actor::GraphObject::getX();
                     int newY = Actor::GraphObject::getY();
-                    Actor::getWorld()->getObjects()[newX][newY] = thiefbot;
+                    Actor::getWorld()->getObjects()[newX][newY] = Level::thiefbot;
                     m_dist++;
                     flag2 = true;
                 }
@@ -509,7 +516,7 @@ void ThiefBot::doSomething() {
                         Actor::move();
                         int newX = Actor::GraphObject::getX();
                         int newY = Actor::GraphObject::getY();
-                        Actor::getWorld()->getObjects()[newX][newY] = thiefbot;
+                        Actor::getWorld()->getObjects()[newX][newY] = Level::thiefbot;
                         m_dist++;
                         moved = true;
                     } else { // If cannot move
@@ -541,13 +548,13 @@ void Factory::doSomething() {
     for (int i = xLow; i <= xHigh; i++) {
         for (int j = yLow; j <= yHigh; j++) { // Count the number of thiefbots within square region
             char object = Actor::getWorld()->getObjects()[i][j];
-            if (object == thiefbot || object == mean_thiefbot) count++;
+            if (object == Level::thiefbot || object == Level::mean_thiefbot) count++;
         }
     }
 
     if (count < 3) {
         char object = Actor::getWorld()->getObjects()[currentX][currentY];
-        if (object != thiefbot && object != mean_thiefbot) { // No bot on factory
+        if (object != Level::thiefbot && object != Level::mean_thiefbot) { // No bot on factory
             if (rand() % 50 == 0) { // 1 in 50 chance
                 if (m_mean) {
                     Actor* bot = new MeanBot(currentX, currentY, Actor::getWorld());
@@ -558,7 +565,7 @@ void Factory::doSomething() {
                     Actor::getWorld()->addActor(bot);
                 }
                 Actor::getWorld()->GameWorld::playSound(SOUND_ROBOT_BORN);
-                Actor::getWorld()->getObjects()[currentX][currentY] = thiefbot;
+                Actor::getWorld()->getObjects()[currentX][currentY] = Level::thiefbot;
             }
         }
     }
@@ -693,6 +700,9 @@ void Ammo::additional() {
 void ThiefBot::additional() {return;}
 
 void MeanBot::additional() {Actor::botShoot();}
+
+
+
 
 
 

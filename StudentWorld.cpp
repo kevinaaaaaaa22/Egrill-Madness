@@ -14,7 +14,7 @@ GameWorld* createStudentWorld(string assetPath) {
 StudentWorld::StudentWorld(string assetPath) : GameWorld(assetPath) {
     m_objects = new string[VIEW_HEIGHT];
     m_ticks = 0;
-    m_crystalCount = 0;
+    m_egrillCount = 0;
     m_finishedLevel = false;
     m_bonus = 1000;
 }
@@ -27,11 +27,11 @@ string* StudentWorld::getObjects() {return m_objects;}
 
 Avatar* StudentWorld::getAvatar() {return m_avatar;}
 
-int StudentWorld::crystalCount() {return m_crystalCount;}
+int StudentWorld::egrillCount() {return m_egrillCount;}
 
 int StudentWorld::getTicks() {return m_ticks;}
 
-void StudentWorld::removeCrystal() {m_crystalCount--;}
+void StudentWorld::removeEgrill() {m_egrillCount--;}
 
 void StudentWorld::finishLevel() {m_finishedLevel = true;}
 
@@ -86,7 +86,7 @@ char StudentWorld::thiefBotScan(double x, double y) {
 int StudentWorld::init() {
     m_objects = new string[VIEW_HEIGHT];
     m_ticks = 0;
-    m_crystalCount = 0;
+    m_egrillCount = 0;
     m_finishedLevel = false;
     m_bonus = 1000;
 
@@ -137,11 +137,6 @@ int StudentWorld::init() {
                         m_actors.push_back(new Ammo(x, y, this));
                         m_objects[x] += Level::empty;
                         break;
-                    case Level::crystal:
-                        m_actors.push_back(new Crystal(x, y, this));
-                        m_objects[x] += Level::empty;
-                        m_crystalCount++;
-                        break;
                     case Level::extra_life:
                         m_actors.push_back(new ExtraLife(x, y, this));
                         m_objects[x] += Level::empty;
@@ -161,6 +156,22 @@ int StudentWorld::init() {
                     case Level::wall:
                         m_actors.push_back(new Wall(x, y));
                         m_objects[x] += Level::wall;
+                        break;
+                    case Level::thiefbot:
+                        break;
+                    case Level::mean_thiefbot:
+                        break;
+                    case Level::pea:
+                        break;
+                    case Level::regular_egrill:
+                        m_actors.push_back(new Egrill(x, y, this, REGULAR_EGRILL, IID_REGULAR_EGRILL));
+                        m_objects[x] += Level::empty;
+                        m_egrillCount++;
+                        break;
+                    case Level::pokylane:
+                        m_actors.push_back(new Egrill(x, y, this, POKYLANE, IID_POKYLANE));
+                        m_objects[x] += Level::empty;
+                        m_egrillCount++;
                         break;
                 }
             }
@@ -239,6 +250,10 @@ string setDisplayText(int score, int level, int lives, int health, int ammo, int
     for (int i = 0; i < 4 - bSize; i++) b = " " + b;
     return "Score: " + s + "  Level: " + l1 + "  Lives: " + l2 + "  Health: " + h + "  Ammo: " + a + "  Bonus: " + b;
 }
+
+
+
+
 
 
 

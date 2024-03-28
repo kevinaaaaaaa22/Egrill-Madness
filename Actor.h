@@ -2,9 +2,6 @@
 #define ACTOR_H_
 
 class StudentWorld;
-const char thiefbot = 's';
-const char mean_thiefbot = 'm';
-const char pea = 'p';
 
 #include "GraphObject.h"
 #include "GameConstants.h"
@@ -96,10 +93,13 @@ class Pit: public Actor {
         void doSomething();
 };
 
-class Crystal: public Actor {
+class Egrill: public Actor {
     public:
-        Crystal(double startX, double startY, StudentWorld* world);
+        Egrill(double startX, double startY, StudentWorld* world, int type, int IID);
+        int getType();
         void doSomething();
+    private:
+        int m_type;
 };
 
 class Exit: public Actor {

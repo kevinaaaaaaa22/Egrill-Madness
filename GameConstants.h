@@ -16,10 +16,11 @@ const int IID_WALL = 6;
 const int IID_EXIT = 7;
 const int IID_MARBLE = 8;
 const int IID_PIT = 9;
-const int IID_CRYSTAL = 10;
 const int IID_RESTORE_HEALTH = 11;
 const int IID_EXTRA_LIFE = 12;
 const int IID_AMMO = 13;
+const int IID_REGULAR_EGRILL = 10;
+const int IID_POKYLANE = 14;
 
 // Sounds
 
@@ -68,6 +69,10 @@ const int GWSTATUS_NOT_IMPLEMENTED	= 5;
 const double SPRITE_WIDTH_GL = .6; // note - this is tied implicitly to SPRITE_WIDTH due to carey's sloppy openGL programming
 const double SPRITE_HEIGHT_GL = .5; // note - this is tied implicitly to SPRITE_HEIGHT due to carey's sloppy openGL programming
 
+// Egrills
+const int REGULAR_EGRILL = 0;
+const int POKYLANE = 1;
+
 // Return a uniformly distributed random int from min to max, inclusive
 
 inline
@@ -82,3 +87,8 @@ int randInt(int min, int max)
 }
 
 #endif // GAMECONSTANTS_H_
+
+
+
+
+

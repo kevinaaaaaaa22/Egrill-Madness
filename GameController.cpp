@@ -69,10 +69,11 @@ static void convertToGlutCoords(double x, double y, double& gx, double& gy, doub
 static void drawPrompt(string mainMessage, string secondMessage);
 static void drawInstructions();
 static void drawHomeScreen(string mainMessage, int score);
+static void drawCollection(GameWorld* m_gw);
 static void drawScoreAndLives(string);
 
 enum GameController::GameControllerState : int {
-    welcome, init, makemove, animate, contgame, finishedlevel, gameover, cleanup, quit, prompt, not_applicable, instructions, homescreen
+    welcome, init, makemove, animate, contgame, finishedlevel, gameover, cleanup, quit, prompt, not_applicable, instructions, homescreen, displayCollection
 };
 
 int GameController::m_msPerTick;
@@ -95,14 +96,15 @@ void GameController::initDrawersAndSounds()
 		{ IID_RAGEBOT     , 3, "ragebot-4.tga", "RAGEBOT", 0 },
 		{ IID_PEA         , 0, "pea.tga", "PEA", 1 },
 		{ IID_ROBOT_FACTORY   , 0, "factory.tga", "ROBOT_FACTORY", 2 },
-		{ IID_CRYSTAL     , 0, "crystal.tga", "CRYSTAL", 2 },
 		{ IID_RESTORE_HEALTH  , 0, "medkit.tga", "RESTORE_HEALTH", 2 },
 		{ IID_EXTRA_LIFE  , 0, "extralife.tga", "EXTRA_LIFE", 2 },
 		{ IID_AMMO        , 0, "ammo.tga", "AMMO", 2 },
 		{ IID_EXIT        , 0, "exit.tga", "EXIT", 2 },
 		{ IID_WALL        , 0, "wall.tga", "WALL", 2 },
 		{ IID_MARBLE      , 0, "marble.tga", "MARBLE", 2 },
-		{ IID_PIT         , 0, "pit.tga", "PIT", 2 }
+		{ IID_PIT         , 0, "pit.tga", "PIT", 2 },
+		{ IID_REGULAR_EGRILL     , 0, "regular_egrill.tga", "REGULAR_EGRILL", 2 },
+		{ IID_POKYLANE     , 0, "pokylane.tga", "POKYLANE", 2 }
 	};
 
 	m_soundMap = {
@@ -426,8 +428,19 @@ void GameController::doSomething()
 						m_postInitPreCleanup = false;
 					}
 					setGameState(welcome);
+				} else if (key == ' ') {
+					setGameState(displayCollection);
 				}
 			}
+			}
+			break;
+		case displayCollection:
+			drawCollection(m_gw);
+			{
+				int key;
+				if (getKeyIfAny(key) && key == '\r') {
+					setGameState(homescreen);
+				}
 			}
 			break;
 	}
@@ -563,7 +576,7 @@ static void drawInstructions()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f (1.0, 1.0, 1.0);
 	glLoadIdentity ();
-	string message0_1 = "You are looking for Egrills (Electronic Grills)";
+	string message0_1 = "You are looking for Egrills (Electric Grills)";
 	string message0_2 = "to prepare for an upcoming barbeque! :)";
 	string message1 = "Collect all of the Egrills to advance to the next level!";
 	string message2 = "However, your haters are trying to stop you :(";
@@ -587,11 +600,28 @@ static void drawHomeScreen(string mainMessage, int score)
 	string scoreM = "Score: " + to_string(score);
 	string message2 = "Press Enter to continue game";
 	string message3 = "Press Tab to restart from the first level";
+	string message4 = "Press Space to view your Egrill collection";
 	outputStrokeCentered(1.5, -5, message1.c_str(), FONT_SCALEDOWN_LARGE);
 	outputStrokeCentered(1, -5, scoreM.c_str(), FONT_SCALEDOWN_LARGE);
 	outputStrokeCentered(0.5, -8, mainMessage.c_str(), FONT_SCALEDOWN_LARGE);
 	outputStrokeCentered(0, -8, message2.c_str(), FONT_SCALEDOWN_LARGE);
-	outputStrokeCentered(-1, -8, message3.c_str(), FONT_SCALEDOWN_LARGE);
+	outputStrokeCentered(-0.5, -8, message3.c_str(), FONT_SCALEDOWN_LARGE);
+	outputStrokeCentered(-1, -8, message4.c_str(), FONT_SCALEDOWN_LARGE);
+	glutSwapBuffers();
+}
+
+static void drawCollection(GameWorld* m_gw) {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColor3f (1.0, 1.0, 1.0);
+	glLoadIdentity ();
+	string message1 = "Your Egrill (Electric Grill) Collection";
+	string message2 = "Regular Egrills: " + to_string(m_gw->getEgrillsCount(REGULAR_EGRILL));
+	string message3 = "Pokylanes: " + to_string(m_gw->getEgrillsCount(POKYLANE));
+	string message4 = "Press Enter to return";
+	outputStrokeCentered(1, -5, message1.c_str(), FONT_SCALEDOWN_LARGE);
+	outputStrokeCentered(0.5, -5, message2.c_str(), FONT_SCALEDOWN_LARGE);
+	outputStrokeCentered(0, -5, message3.c_str(), FONT_SCALEDOWN_LARGE);
+	outputStrokeCentered(-1, -7, message4.c_str(), FONT_SCALEDOWN_LARGE);
 	glutSwapBuffers();
 }
 

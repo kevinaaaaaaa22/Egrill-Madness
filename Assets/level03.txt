@@ -1,15 +1,15 @@
 ###############
-#      @      #
-#     o*o  b h#
-#h    *#*    h#
-#h    o*o    h#
-#h           h#
-#h           h#
-#ooooo     ooo#
-#orboo     o  #
-#*aboo     o e#
-#aaaoo     o  #
-#ooooo     ooo#
-#ooooo        #
-#x   h   v   *#
+#      e    oi#
+#    b r b  ###
+# #    a    ###
+# #   #b#   #x#
+# #    b    # #
+#o#   #b#   # #
+#*#   bbb   # #
+#a#    b    # #
+###   bbb   # #
+#h            #
+#h   2   1    #
+######   ######
+#io    @    oi#
 ###############
